@@ -106,7 +106,7 @@ int current_tty(void)
     } while (fd == -1 && errno == EINTR);
 
     if (fd == -1)
-    	return -1;
+        return -1;
 
     return fd;
 }
@@ -239,9 +239,9 @@ int cursor_position(int *const rowptr, int *const colptr)
 
 NAN_METHOD(Method){
     Isolate* isolate = Isolate::GetCurrent();
-  	HandleScope scope(isolate);
+    HandleScope scope(isolate);
 
-	int ret, row, col;
+    int ret, row, col;
 
     ret = 0;
     row = 0;
@@ -256,7 +256,7 @@ NAN_METHOD(Method){
     Local<Object> pos = Object::New(isolate);
     pos->Set(String::NewFromUtf8(isolate, "row"), Number::New(isolate, row));
     pos->Set(String::NewFromUtf8(isolate, "col"), Number::New(isolate, col));
-  	info.GetReturnValue().Set(pos);
+    info.GetReturnValue().Set(pos);
 }
 
 NAN_MODULE_INIT(Init){
