@@ -1,5 +1,6 @@
 #include <v8.h>
 #include <node.h>
+#include <nan.h>
 #include <stdio.h>
 #include <errno.h>
 
@@ -236,8 +237,8 @@ int cursor_position(int *const rowptr, int *const colptr)
 }
 #endif
 
-void Method(const v8::FunctionCallbackInfo<Value>& args) {
-	Isolate* isolate = Isolate::GetCurrent();
+NAN_METHOD(Method){
+    Isolate* isolate = Isolate::GetCurrent();
   	HandleScope scope(isolate);
 
 	int ret, row, col;
@@ -255,13 +256,11 @@ void Method(const v8::FunctionCallbackInfo<Value>& args) {
     Local<Object> pos = Object::New(isolate);
     pos->Set(String::NewFromUtf8(isolate, "row"), Number::New(isolate, row));
     pos->Set(String::NewFromUtf8(isolate, "col"), Number::New(isolate, col));
-  	args.GetReturnValue().Set(pos);
+  	info.GetReturnValue().Set(pos);
 }
 
-void Init(Handle<Object> exports) {
-  Isolate* isolate = Isolate::GetCurrent();
-  exports->Set(String::NewFromUtf8(isolate, "sync"),
-      FunctionTemplate::New(isolate, Method)->GetFunction());
+NAN_MODULE_INIT(Init){
+    Nan::Export(target, "sync", Method);
 }
 
 NODE_MODULE(hello, Init)
