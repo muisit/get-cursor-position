@@ -253,9 +253,9 @@ NAN_METHOD(Method){
     if (row < 1 || col < 1)
         return;
 
-    Local<Object> pos = Object::New(isolate);
-    pos->Set(String::NewFromUtf8(isolate, "row"), Number::New(isolate, row));
-    pos->Set(String::NewFromUtf8(isolate, "col"), Number::New(isolate, col));
+    Local<Object> pos = Nan::New<Object>();
+    Nan::Set(pos, Nan::New("row").ToLocalChecked(), Nan::New(row)).Check();
+    Nan::Set(pos, Nan::New("col").ToLocalChecked(), Nan::New(col)).Check();
     info.GetReturnValue().Set(pos);
 }
 
