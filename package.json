@@ -1,5 +1,5 @@
 {
-  "name": "get-cursor-position",
+  "name": "@magicdawn/get-cursor-position",
   "version": "1.0.5",
   "description": "Get the cursor's current position in your terminal.",
   "main": "index.js",
