@@ -253,15 +253,25 @@ void Method(const v8::FunctionCallbackInfo<Value>& args) {
         return;
 
     Local<Object> pos = Object::New(isolate);
-    pos->Set(String::NewFromUtf8(isolate, "row"), Number::New(isolate, row));
-    pos->Set(String::NewFromUtf8(isolate, "col"), Number::New(isolate, col));
+
+    MaybeLocal<String> s=String::NewFromUtf8(isolate, "row");
+    if(!s.IsEmpty()) {
+        pos->Set(pos->CreationContext(), s.ToLocalChecked(), Number::New(isolate, row));
+    }
+    s=String::NewFromUtf8(isolate, "col");
+    if(!s.IsEmpty()) {
+        pos->Set(pos->CreationContext(), s.ToLocalChecked(), Number::New(isolate, col));
+    }
   	args.GetReturnValue().Set(pos);
 }
 
-void Init(Handle<Object> exports) {
+void Init(Local<Object> exports) {
   Isolate* isolate = Isolate::GetCurrent();
-  exports->Set(String::NewFromUtf8(isolate, "sync"),
-      FunctionTemplate::New(isolate, Method)->GetFunction());
+  MaybeLocal<String> s = String::NewFromUtf8(isolate, "sync");
+  MaybeLocal<Function> f = FunctionTemplate::New(isolate, Method)->GetFunction(exports->CreationContext());
+  if(!s.IsEmpty() && !f.IsEmpty()) {
+      exports->Set(exports->CreationContext(), s.ToLocalChecked(), f.ToLocalChecked());
+  }
 }
 
 NODE_MODULE(hello, Init)
